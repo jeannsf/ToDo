@@ -1,13 +1,15 @@
 import express, { Request, Response } from 'express';
 import pool from './db';
+import cors from 'cors';
 
 const PORT: number = process.env.PORT ? Number(process.env.PORT) : 8000;
 const app = express();
+app.use(cors());
+
 
 // Get all todos
-app.get('/todos', async (req: Request, res: Response) => {
-  const userEmail = 'usuario@exemplo.com' 
-
+app.get('/todos/:userEmail', async (req: Request, res: Response) => {
+  const { userEmail } = req.params;
   try {
     const result = await pool.query('SELECT * FROM todos WHERE user_email = $1', [userEmail]);
     res.json(result.rows);
