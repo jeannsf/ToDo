@@ -12,7 +12,7 @@ interface Task {
 }
 
 interface ModalProps {
-  mode: "edit" | "create";
+  mode: "edite" | "Crie";
   setShowModal: (value: boolean) => void;
   getData: () => void;
   task?: Task;
@@ -36,7 +36,7 @@ const Modal: React.FC<ModalProps> = ({ mode, setShowModal, getData, task }) => {
     unknown
   ];
 
-  const editMode = mode === "edit" ? true : false;
+  const editMode = mode === "edite" ? true : false;
 
   const [data, setData] = useState<Data>({
     user_email: editMode && task ? task.user_email : cookies.Email,

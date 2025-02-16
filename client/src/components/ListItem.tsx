@@ -55,7 +55,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, getData }) => {
       </div>
       {showModal && (
         <Modal
-          mode="edit"
+          mode="edite"
           setShowModal={setShowModal}
           getData={getData}
           task={task}

@@ -31,7 +31,7 @@ const ListHeader: React.FC<ListHeaderProps> = ({ listName, getData }) => {
       </div>
       {showModal && (
         <Modal
-          mode="create"
+          mode="Crie"
           setShowModal={setShowModal}
           getData={getData}
         />
