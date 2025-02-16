@@ -1,6 +1,11 @@
 import { Request, Response } from 'express';
 import * as todoService from '../services/todoService';
 
+/**
+ * Retorna todas as tarefas de um usuário.
+ * @param req - Requisição HTTP contendo o parâmetro "userEmail" na URL.
+ * @param res - Resposta HTTP que retorna a lista de tarefas.
+ */
 export const getTodos = async (req: Request, res: Response): Promise<void> => {
   const { userEmail } = req.params;
   try {
@@ -12,6 +17,11 @@ export const getTodos = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/**
+ * Cria uma nova tarefa.
+ * @param req - Requisição HTTP contendo os dados da tarefa no corpo.
+ * @param res - Resposta HTTP que retorna a tarefa criada.
+ */
 export const createTodo = async (req: Request, res: Response): Promise<void> => {
   const { user_email, title, description, progress, date, status } = req.body;
   try {
@@ -30,6 +40,11 @@ export const createTodo = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
+/**
+ * Atualiza uma tarefa existente.
+ * @param req - Requisição HTTP contendo o ID da tarefa na URL e os novos dados no corpo.
+ * @param res - Resposta HTTP que retorna a tarefa atualizada.
+ */
 export const updateTodo = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   const { user_email, title, description, progress, date, status } = req.body;
@@ -49,6 +64,11 @@ export const updateTodo = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
+/**
+ * Deleta uma tarefa.
+ * @param req - Requisição HTTP contendo o ID da tarefa a ser deletada na URL.
+ * @param res - Resposta HTTP que retorna a tarefa deletada.
+ */
 export const deleteTodo = async (req: Request, res: Response): Promise<void> => {
   const { id } = req.params;
   try {

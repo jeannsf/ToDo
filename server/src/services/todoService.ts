@@ -1,7 +1,10 @@
 import { v4 as uuidv4 } from 'uuid';
 import pool from '../db';
 
-interface TodoData {
+/**
+ * Representa os dados de uma tarefa.
+ */
+export interface TodoData {
   user_email: string;
   title: string;
   description: string;
@@ -10,11 +13,21 @@ interface TodoData {
   status: 'pendente' | 'em progresso' | 'concluída';
 }
 
+/**
+ * Busca todas as tarefas de um usuário.
+ * @param userEmail - Email do usuário.
+ * @returns Um array de tarefas.
+ */
 export const fetchTodos = async (userEmail: string): Promise<any[]> => {
   const result = await pool.query('SELECT * FROM todos WHERE user_email = $1', [userEmail]);
   return result.rows;
 };
 
+/**
+ * Cria uma nova tarefa.
+ * @param data - Dados da tarefa.
+ * @returns A tarefa criada.
+ */
 export const createTodo = async (data: TodoData): Promise<any> => {
   const id = uuidv4();
   const result = await pool.query(
@@ -25,6 +38,12 @@ export const createTodo = async (data: TodoData): Promise<any> => {
   return result.rows[0];
 };
 
+/**
+ * Atualiza uma tarefa existente.
+ * @param id - ID da tarefa.
+ * @param data - Novos dados da tarefa.
+ * @returns A tarefa atualizada.
+ */
 export const updateTodo = async (id: string, data: TodoData): Promise<any> => {
   const result = await pool.query(
     `UPDATE todos 
@@ -35,6 +54,11 @@ export const updateTodo = async (id: string, data: TodoData): Promise<any> => {
   return result.rows[0];
 };
 
+/**
+ * Deleta uma tarefa.
+ * @param id - ID da tarefa.
+ * @returns A tarefa deletada.
+ */
 export const deleteTodo = async (id: string): Promise<any> => {
   const result = await pool.query('DELETE FROM todos WHERE id = $1 RETURNING *', [id]);
   return result.rows[0];

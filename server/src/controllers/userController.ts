@@ -1,8 +1,17 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import pool from '../db';
+import * as userService from '../services/userService';
 
+/**
+ * Registra um novo usuário.
+ * 
+ * Recebe o email e a senha no corpo da requisição, criptografa a senha,
+ * cria um novo usuário no banco de dados e gera um token JWT.
+ *
+ * @param req - Requisição HTTP contendo email e password no corpo.
+ * @param res - Resposta HTTP contendo o email do usuário e o token JWT.
+ */
 export const signup = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   const saltRounds = 10;
@@ -10,29 +19,34 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   const hashedPassword = bcrypt.hashSync(password, salt);
 
   try {
-    const signUpResult = await pool.query(
-      `INSERT INTO users(email, hashed_password) VALUES($1, $2) RETURNING *`,
-      [email, hashedPassword]
-    );
-    const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
-    res.json({ email, token });
+    const newUser = await userService.createUser(email, hashedPassword);
+    const token = jwt.sign({ email: newUser.email }, 'secret', { expiresIn: '1hr' });
+    res.json({ email: newUser.email, token });
   } catch (error: any) {
     console.error('Error during signup:', error);
     res.status(400).json({ detail: error.detail });
   }
 };
 
+/**
+ * Realiza o login do usuário.
+ * 
+ * Verifica se o usuário existe pelo email, compara a senha fornecida com a senha armazenada,
+ * e, se as credenciais estiverem corretas, gera um token JWT.
+ *
+ * @param req - Requisição HTTP contendo email e password no corpo.
+ * @param res - Resposta HTTP contendo o email do usuário e o token JWT se o login for bem-sucedido.
+ */
 export const login = async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body;
   try {
-    const users = await pool.query(`SELECT * FROM users WHERE email = $1`, [email]);
-    if (!users.rows.length) {
+    const user = await userService.findUserByEmail(email);
+    if (!user) {
       res.status(404).json({ detail: 'User does not exist!' });
       return;
     }
-    const user = users.rows[0];
     const passwordMatch = await bcrypt.compare(password, user.hashed_password);
-    const token = jwt.sign({ email }, 'secret', { expiresIn: '1hr' });
+    const token = jwt.sign({ email: user.email }, 'secret', { expiresIn: '1hr' });
     if (passwordMatch) {
       res.json({ email: user.email, token });
     } else {
