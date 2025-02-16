@@ -1,0 +1,20 @@
+services:
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    # This line specifies a volume mapping. It maps the ./data/db directory on the host machine to the /var/lib/postgresql/data directory inside the db container. This means that any data written to /var/lib/postgresql/data inside the container will be stored in the ./data/db directory on the host machine. This is useful for persisting database data even if the container is stopped or removed.
+    volumes:
+      - ./docker_vol_postgresql_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
