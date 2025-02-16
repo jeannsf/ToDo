@@ -1,7 +1,11 @@
-body {
+html, body {
   margin: 0;
   padding: 0;
-  background-color: rgb(233, 241, 249);
+  height: 100%;
+}
+
+body {
+  background: linear-gradient(180deg, #00C3E6 0.31%, #3A4AE5 100%);
   display: flex;
   justify-content: center;
   font-family: 'Trebuchet MS', Arial, sans-serif;
@@ -120,14 +124,10 @@ input {
 }
 
 .tick {
-  padding: 10px;
-}
-
-.tick path {
-  fill:none;
-  stroke:#000;
-  stroke-miterlimit:10;
-  stroke-width:32px
+  margin: 10px; 
+  padding: 5px;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 /* Modal */
@@ -233,4 +233,33 @@ input {
 
 .task-title {
   width: 300px;
+}
+
+
+.task-status {
+  display: inline-block;
+  padding: 0.25em 0.75em;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: capitalize;
+  margin-left: 1rem; /* desloca um pouco para a direita */
+  white-space: nowrap; /* impede a quebra de linha */
+}
+
+
+
+.task-status.pendente {
+  background-color: #e74c3c;
+  color: #fff;
+}
+
+.task-status.em-progresso {
+  background-color: #f1c40f;
+  color: #000;
+}
+
+.task-status.concluida {
+  background-color: #2ecc71;
+  color: #fff;
 }

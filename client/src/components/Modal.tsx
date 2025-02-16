@@ -95,14 +95,26 @@ const Modal: React.FC<ModalProps> = ({ mode, setShowModal, getData, task }) => {
   ) => {
     const { name, value } = e.target;
     setData((prevData) => {
-      const newData = {
+      let newData = {
         ...prevData,
         [name]: name === "progress" ? Number(value) : value,
       };
-      console.log(newData); 
+  
+      if (name === "progress") {
+        const progressValue = Number(value);
+        if (progressValue === 0) {
+          newData.status = "pendente";
+        } else if (progressValue === 100) {
+          newData.status = "concluída";
+        } else {
+          newData.status = "em progresso";
+        }
+      }
+  
       return newData;
     });
   };
+  
   
 
   return (
@@ -150,21 +162,15 @@ const Modal: React.FC<ModalProps> = ({ mode, setShowModal, getData, task }) => {
           />
           <br />
 
-          {/* Select para status */}
-          <label htmlFor="status">Selecione o status</label>
+          <label htmlFor="status">Status</label>
           <br />
-          <select
+          <input
             id="status"
             name="status"
             value={data.status}
-            onChange={handleChange}
-          >
-            <option value="pendente">Pendente</option>
-            <option value="em progresso">Em Progresso</option>
-            <option value="concluída">Concluída</option>
-          </select>
+            readOnly
+          />
           <br />
-
           <input
             className={mode}
             type="submit"

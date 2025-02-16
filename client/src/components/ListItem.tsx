@@ -25,9 +25,7 @@ const ListItem: React.FC<ListItemProps> = ({ task, getData }) => {
     try {
       const response = await fetch(
         `${process.env.REACT_APP_SERVERURL}/todos/${task.id}`,
-        {
-          method: "DELETE",
-        }
+        { method: "DELETE" }
       );
       if (response.status === 200) {
         getData();
@@ -37,12 +35,43 @@ const ListItem: React.FC<ListItemProps> = ({ task, getData }) => {
     }
   };
 
+  const handleCheck = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const checked = e.target.checked;
+    if (checked) {
+      try {
+        const response = await fetch(
+          `${process.env.REACT_APP_SERVERURL}/todos/${task.id}`,
+          {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              user_email: task.user_email,
+              title: task.title,
+              description: task.description,
+              progress: 100,        
+              date: task.date,
+              status: "concluída"    
+            }),
+          }
+        );
+        if (response.status === 200) {
+          getData();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   return (
     <li className="list-item">
       <div className="info-container">
-        <TickIcon />
+        <TickIcon checked={task.progress === 100} onChange={handleCheck} />
         <p className="task-title">{task.title}</p>
         <ProgressBar progress={task.progress} />
+        <p className={`task-status ${task.status.replace(" ", "-")}`}>
+          {task.status}
+        </p>
       </div>
 
       <div className="button-container">
