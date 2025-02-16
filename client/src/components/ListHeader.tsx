@@ -1,28 +1,43 @@
-import React from 'react';
-import { FaCheckSquare } from 'react-icons/fa';
+import React, { useState } from 'react'
+import Modal from './Modal'
+import { useCookies } from 'react-cookie'
 
 interface ListHeaderProps {
-  listName: string;
+  listName: string
+  getData: () => void
 }
 
-const ListHeader: React.FC<ListHeaderProps> = ({ listName }) => {
-const signOut = () => {
-  console.log('signout')
-};
+const ListHeader: React.FC<ListHeaderProps> = ({ listName, getData }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(['Email', 'AuthToken'])
+  const [showModal, setShowModal] = useState<boolean>(false)
 
+  const signOut = (): void => {
+    console.log('signout')
+    removeCookie('Email')
+    removeCookie('AuthToken')
+    window.location.reload()
+  }
 
   return (
     <div className="list-header">
-      <h1 className="list-header-title">
-        <FaCheckSquare className="list-header-icon" size={30} /> {listName}
-      </h1>
-      <div className='button-container'>
-
-      <button className="create">Adicionar</button>
-      <button className='signout' onClick={signOut}>Sair</button>
+      <h1>{listName}</h1>
+      <div className="button-container">
+        <button className="create" onClick={() => setShowModal(true)}>
+          Adicionar
+        </button>
+        <button className="signout" onClick={signOut}>
+          Sair
+        </button>
       </div>
+      {showModal && (
+        <Modal
+          mode="create"
+          setShowModal={setShowModal}
+          getData={getData}
+        />
+      )}
     </div>
-  );
-};
+  )
+}
 
-export default ListHeader;
+export default ListHeader
