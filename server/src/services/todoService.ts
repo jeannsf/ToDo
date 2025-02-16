@@ -10,12 +10,12 @@ interface TodoData {
   status: 'pendente' | 'em progresso' | 'concluída';
 }
 
-export const fetchTodos = async (userEmail: string) => {
+export const fetchTodos = async (userEmail: string): Promise<any[]> => {
   const result = await pool.query('SELECT * FROM todos WHERE user_email = $1', [userEmail]);
   return result.rows;
 };
 
-export const createTodo = async (data: TodoData) => {
+export const createTodo = async (data: TodoData): Promise<any> => {
   const id = uuidv4();
   const result = await pool.query(
     `INSERT INTO todos(id, user_email, title, description, progress, date, status)
@@ -25,7 +25,7 @@ export const createTodo = async (data: TodoData) => {
   return result.rows[0];
 };
 
-export const updateTodo = async (id: string, data: TodoData) => {
+export const updateTodo = async (id: string, data: TodoData): Promise<any> => {
   const result = await pool.query(
     `UPDATE todos 
      SET user_email = $1, title = $2, description = $3, progress = $4, date = $5, status = $6
@@ -35,7 +35,7 @@ export const updateTodo = async (id: string, data: TodoData) => {
   return result.rows[0];
 };
 
-export const deleteTodo = async (id: string) => {
+export const deleteTodo = async (id: string): Promise<any> => {
   const result = await pool.query('DELETE FROM todos WHERE id = $1 RETURNING *', [id]);
   return result.rows[0];
 };
