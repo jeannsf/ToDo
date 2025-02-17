@@ -53,6 +53,7 @@ Esta aplicação é composta por duas camadas:
 - **PostgreSQL:** Banco de dados relacional robusto.
 - **Modelagem:**  
   - **Tabela `todos`:** Armazena as tarefas dos usuários.
+  - Identificador (id): Utilizei uma coluna do tipo VARCHAR para armazenar o ID, pois optei pelo uso de UUID (Universally Unique Identifier) para a geração automática e única de identificadores. Essa abordagem garante que cada registro tenha um ID exclusivo, evitando colisões mesmo em ambientes distribuídos, além de facilitar a integração com outros sistemas que adotam o mesmo padrão.
   - **Tabela `users`:** Armazena as informações dos usuários, com as senhas devidamente criptografadas.
 - **Enumeração `task_status`:** Restringe os status das tarefas aos valores: `'pendente'`, `'em progresso'` e `'concluída'`.
 
