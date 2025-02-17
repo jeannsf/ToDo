@@ -1,6 +1,6 @@
 # Todo App
 
-O Todo App é uma aplicação full-stack para gerenciamento de tarefas e autenticação de usuários. A aplicação é dividida em duas partes principais:
+O Todo App é uma aplicação full-stack para gerenciamento de tarefas que possui autenticação de usuários. A aplicação é dividida em duas partes principais:
 
 ## Back-end
 
