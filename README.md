@@ -135,13 +135,13 @@ Esta arquitetura integrada proporciona uma experiência de usuário fluida e seg
 Crie um arquivo `.env` na raiz do projeto e defina as seguintes variáveis:
 
 ```env
-POSTGRES_USERNAME=
-POSTGRES_PASSWORD=
-PGADMIN_DEFAULT_EMAIL=
-PGADMIN_DEFAULT_PASSWORD=
-HOST=
-DBPORT=
-REACT_APP_SERVERURL=
+POSTGRES_USERNAME=postgres (exemplo)
+POSTGRES_PASSWORD=postgres_pass (exemplo)
+PGADMIN_DEFAULT_EMAIL=test@test.com (exemplo)
+PGADMIN_DEFAULT_PASSWORD=pass_pg (exemplo)
+HOST=localhost (exemplo)
+DBPORT=5432 (exemplo) 
+REACT_APP_SERVERURL=http://localhost:8000 (exemplo)
 ```
 
 ## Instalação e Execução
