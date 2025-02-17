@@ -1,26 +1,49 @@
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
-  height: 100%;
+  height: 100%; /* Garante que o body ocupe toda a altura da tela */
 }
 
 body {
-  background: linear-gradient(180deg, #00C3E6 0.31%, #3A4AE5 100%);
+  margin: 0;
+  padding: 0;
+  height: 100vh;
   display: flex;
   justify-content: center;
-  font-family: 'Trebuchet MS', Arial, sans-serif;
+  align-items: center;
+  font-family: "Trebuchet MS", Arial, sans-serif;
+  background: linear-gradient(180deg, #00c3e6 0.31%, #3a4ae5 100%);
+  position: relative; /* Necessário para posicionar o pseudo-elemento */
 }
 
-.app {
-  background-color: rgb(255, 255, 255);
-  box-shadow: rgba(0,0,0, 0.05) 0 6px 24px, rgba(0,0,0, 0.08) 0 0 0 1px;
-  border-radius: 10px;
-  padding: 10px;
-  width: 800px;
-  margin-top: 50px;
+/* Pseudo-elemento para o SVG */
+body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url("/public/images/VANLUON.svg"); /* Caminho para o SVG */
+  background-size: cover; /* Faz o SVG cobrir toda a área */
+  background-position: center; /* Centraliza o SVG */
+  background-repeat: no-repeat; /* Impede que o SVG se repita */
+  pointer-events: none; /* Permite interação com elementos abaixo */
 }
 
-.button-container, .info-container {
+.auth-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0; /* Remove a margem padrão */
+  min-width: 350px;
+  width: 100%;
+  max-width: 500px;
+}
+
+.button-container,
+.info-container {
   display: flex;
   align-items: center;
 }
@@ -37,6 +60,7 @@ body {
   border: 1.5px solid rgb(141, 181, 145);
   color: rgb(141, 181, 145);
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .edit:hover {
@@ -48,10 +72,29 @@ body {
   background-color: rgb(141, 181, 145);
 }
 
+.view {
+  border: 1.5px solid rgb(0, 174, 255);
+  color: rgb(0, 174, 255);
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.view:hover {
+  background-color: rgb(0, 153, 255);
+  color: rgb(255, 255, 255);
+}
+
+.view:active {
+  background-color: rgb(0, 132, 255);
+  color: rgb(255, 255, 255);
+}
+
 .delete {
   border: 1.5px solid rgb(255, 175, 163);
   color: rgb(255, 175, 163);
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 .delete:hover {
@@ -64,9 +107,30 @@ body {
 }
 
 .create {
-  border: 1.5px solid rgb(108, 115, 148);
-  color: rgb(108, 115, 148);
+  border: 1.5px solid rgb(0, 0, 0);
+  color: rgb(255, 255, 255);
   text-transform: uppercase;
+  background-color: #000;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+
+
+.input-container {
+  position: relative;
+  width: 100%;
+  margin: 11px 0;
+  overflow: hidden; /* Impede que o input ultrapasse os limites */
+}
+
+.icon {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #888; /* Cor do ícone */
+  z-index: 1; /* Garante que o ícone fique acima do input */
 }
 
 .create:hover {
@@ -75,13 +139,17 @@ body {
 
 .create:active {
   background-color: rgb(108, 115, 148);
-  color: rgb(255, 255, 255)
+  color: rgb(255, 255, 255);
 }
 
+.error-msg {
+  color: rgb(255, 255, 255);
+}
 .signout {
   border: 1.5px solid rgb(255, 175, 163);
   background-color: rgb(255, 175, 163) !important;
   color: rgb(234, 234, 234);
+  cursor: pointer;
 }
 
 .signout:hover {
@@ -97,11 +165,10 @@ body {
 
 input {
   margin: 11px 0;
-  padding: 12px 16px;
+  padding: 18px;
   border-radius: 12px;
   border: 1.5px solid rgb(230, 232, 236);
 }
-
 
 /* List Header */
 
@@ -109,7 +176,7 @@ input {
   width: 100%;
   display: flex;
   justify-content: space-between;
-  border-bottom: rgba(0,0,0,0.05) 1px solid;
+  border-bottom: rgba(0, 0, 0, 0.05) 1px solid;
 }
 
 /* List Item */
@@ -118,42 +185,72 @@ input {
   width: 100%;
   margin: 10px 0;
   border-radius: 10px;
-  box-shadow: rgba(0,0,0,0.08) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.08) 0 0 0 1px;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.list-item-content {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+.list-item.completed .list-item-content {
+  text-decoration: line-through;
+  color: gray; /* Ajuste a cor conforme necessário */
+  opacity: 0.6; /* Adiciona um pouco de desfoque visual para indicar conclusão */
+}
+
+.list-item.completed .task-status {
+  color: #4caf50; /* Muda a cor da descrição para um verde, por exemplo */
+}
+
+.list-item {
+  transition: all 0.3s ease-in-out;
 }
 
 .tick {
-  margin: 10px; 
+  margin: 10px;
   padding: 5px;
   margin-right: 10px;
   vertical-align: middle;
+  cursor: pointer;
 }
 
 /* Modal */
-.overlay {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.modal {
+  position: fixed; /* Fixa o Modal na tela */
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); /* Centraliza o Modal */
+  width: 500px; /* Largura do Modal */
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  z-index: 1000; /* Garante que o Modal fique acima de outros elementos */
 }
 
-.modal {
-  width: 500px;
-  background-color: rgb(255, 255, 255);
-  padding: 40px;
-  border-radius: 10px;
-  box-shadow: rgba(0,0,0,0.05) 0 6px 24px 0, rgba(0,0,0,0.08) 0 0 0 1px;
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Fundo escuro semi-transparente */
+  z-index: 999; /* Fica abaixo do Modal, mas acima de outros elementos */
 }
 
 .modal .form-title-container {
   display: flex;
   justify-content: space-between;
+}
+
+.modal .form-title-container button {
+  cursor:pointer
 }
 
 .modal .form-title-container button {
@@ -174,42 +271,57 @@ input {
   font-size: 13px;
 }
 
-/* Auth */
-.auth-container {
-  display: flex;
-  justify-content: center;
-  margin: 5px;
-}
-
 .auth-container-box {
-  width: 500px;
-  border-radius: 10px;
+  min-width: 500px;
+  max-width: 600px;
+  min-height: 540px;
+  max-height: 700px;
+  width: auto; 
+  height: auto; 
+  border-radius: 45px;
   overflow: hidden;
-  box-shadow: rgba(0,0,0,0.05) 0 6px 24px, rgba(0,0,0,0.08) 0 0 0 1px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+  background-color: rgba(180, 210, 255, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.3); 
+  -webkit-backdrop-filter: blur(20px); 
+  backdrop-filter: blur(20px); 
 }
 
 .auth-container-box form {
   display: flex;
   flex-direction: column;
-  height:350px;
-  padding: 20px;
+  padding: 40px;
 }
 
 .auth-options {
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+  align-items: center;
+  color: #fff;
 }
 
 .auth-options button {
   width: 50%;
   border: none;
   padding: 10px;
-  color: rgb(35,38, 47);
+  color: rgb(35, 38, 47);
+}
+
+.auth-options a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.auth-options a:hover {
+  text-decoration: underline;
 }
 
 .copyright {
   font-size: 13px;
   margin: 10px;
-  color: rgb(114, 114, 144);
+  color: rgb(255, 255, 255);
 }
 
 .user-email {
@@ -232,22 +344,20 @@ input {
 }
 
 .task-title {
-  width: 300px;
+  padding-right: 10px;
 }
-
 
 .task-status {
   display: inline-block;
-  padding: 0.25em 0.75em;
+  padding: 0.25em 0.25em;
   border-radius: 12px;
+  margin-right: 4px;
   font-size: 0.8rem;
   font-weight: 600;
   text-transform: capitalize;
   margin-left: 1rem; /* desloca um pouco para a direita */
   white-space: nowrap; /* impede a quebra de linha */
 }
-
-
 
 .task-status.pendente {
   background-color: #e74c3c;
@@ -263,3 +373,522 @@ input {
   background-color: #2ecc71;
   color: #fff;
 }
+.listheader-content h1{
+  margin-bottom: 0px;
+}
+
+.listheader-content .user-email{
+  margin-left: 0px;
+}
+
+.header-section {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #fff;
+}
+
+.header-section p {
+  margin: 0 0 15px 0px;
+}
+
+.listheader-content{
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-container {
+  max-height: 700px;
+  min-width: 753px;
+  width: 100%;
+  padding: 40px;
+  height: 700px;
+  border-radius: 45px;
+  box-shadow: rgba(0, 0, 0, 0.05) 0 6px 24px, rgba(0, 0, 0, 0.08) 0 0 0 1px;
+  background: rgba(249, 249, 249, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+}
+
+
+.status-text {
+  display: flex;
+  justify-content: end;
+  margin-bottom: 10px;
+}
+
+
+.task-info{
+  display: flex;
+}
+
+.progres-item{
+  display: flex;
+  align-items: center;
+}
+
+
+.input-container {
+  position: relative;
+  width: 100%;
+  margin: 11px 0;
+  box-sizing: border-box;
+}
+
+.input-container input {
+  width: 100%;
+  height: 40px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 1.5px solid rgb(230, 232, 236);
+  font-size: 14px;
+  box-sizing: border-box;
+}
+
+.input-container input::placeholder {
+  color: #888;
+  font-size: 14px;
+}
+
+.input-container input:focus {
+  outline: none;
+  border-color: #3a4ae5;
+  box-shadow: 0 0 0 2px rgba(58, 74, 229, 0.1);
+}
+
+
+.status-text{
+  display: flex;
+  justify-content: center;
+
+}
+
+/* Modal Confirm */
+.form-title-container .close-btn {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: #888;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.form-title-container .close-btn:hover {
+  color: #f44336;
+}
+
+.form-title-container .close-btn:active {
+  color: #d32f2f;
+}
+
+/* Mensagem do Modal */
+.modal-message {
+  font-size: 1rem;
+  margin-bottom: 20px;
+  line-height: 1.5;
+}
+
+/* Estilo do Status */
+.modal-status {
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+/* Cores dos Status */
+.modal-status.concluir {
+  color: #4caf50;
+}
+
+.modal-status.excluir {
+  color: #f44336;
+}
+
+/* Botões de Ação */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 45%;
+}
+
+/* Botão Cancelar */
+.cancel {
+  color: #555;
+  background-color: transparent;
+  border-color: #ccc;
+}
+
+.cancel:hover {
+  background-color: #f7f7f7;
+}
+
+.cancel:active {
+  background-color: #e7e7e7;
+}
+
+/* Botão Confirmar */
+.confirm {
+  color: white;
+  background-color: #4caf50;
+  border-color: #4caf50;
+}
+
+.confirm:hover {
+  background-color: #45a049;
+  border-color: #45a049;
+}
+
+.confirm:active {
+  background-color: #388e3c;
+  border-color: #388e3c;
+}
+
+.confirm.excluir {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.confirm.excluir:hover {
+  background-color: #e53935;
+  border-color: #e53935;
+}
+
+.confirm.excluir:active {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  
+  .auth-container-box {
+    width: 100%;
+    height: auto;
+    min-height: 450px;
+    margin: 20px;
+  }
+
+  .auth-container-box form {
+    padding: 20px;
+    height: auto;
+  }
+
+  .modal {
+    width: 90%;
+    max-width: 500px;
+    margin: 20px;
+  }
+  
+  .tasks-container {
+    width: 83%;
+    height: auto;
+    min-height: 450px;
+    margin: 20px;
+  }
+
+  .list-item {
+    flex-direction: column;
+    padding: 5px 0px;
+  }
+
+  .task-info {
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .progres-item {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .button-container {
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+
+  .button-container button {
+    padding: 8px 15px;
+    font-size: 12px;
+  }
+
+  .list-item-content {
+    padding: 0px;
+    margin: 1px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+/* Desktop menor e tablets grandes */
+@media screen and (max-width: 1024px) {
+  .tasks-container {
+    min-width: 753px;
+    max-height: 600px;
+    height: 600px;
+    padding: 30px;
+  }
+  .list-item-content {
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: space-between;
+  }
+}
+
+
+.modal-status {
+  font-weight: bold;
+  text-transform: capitalize;
+  padding: 8px 12px;
+  border-radius: 8px;
+  width: fit-content;
+}
+
+.modal-status.pendente {
+  background-color: #e74c3c;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.modal-status.progresso {
+  background-color: #f1c40f;
+  color: #000;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+.modal-status.concluida {
+  background-color: #2ecc71;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+}
+
+/* Ações do Modal */
+.modal-actions {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
+/* modal view */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Container do modal com design limpo */
+.modal-container {
+  background: #fff;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 500px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+}
+
+/* Cabeçalho do modal */
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid #e0e0e0;
+  background-color: #f7f7f7;
+}
+
+.modal-header h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.modal-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Corpo do modal */
+.modal-body {
+  padding: 1rem 1.5rem;
+}
+
+.modal-item {
+  margin-bottom: 1rem;
+}
+
+.modal-label {
+  display: block;
+  font-weight: bold;
+  margin-bottom: 0.3rem;
+  color: #333;
+}
+
+.modal-content {
+  margin: 0;
+  color: #555;
+}
+
+/* Estilos para status com cores diferenciadas */
+.status-pendente {
+  color: #e67e22;
+}
+
+.status-progresso {
+  color: #3498db;
+}
+
+.status-concluida {
+  color: #27ae60;
+}
+
+/* Rodapé do modal */
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid #e0e0e0;
+  text-align: right;
+  background-color: #f7f7f7;
+}
+
+.modal-close-action {
+  padding: 0.5rem 1rem;
+  background-color: #3498db;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.modal-close-action:hover {
+  background-color: #2980b9;
+}
+
+
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .modal {
+    width: 80%;
+    padding: 15px;
+    margin: 0 auto; /* Centraliza o modal */
+  }
+
+  .modal-header h3 {
+    font-size: 1.1rem;
+  }
+
+  .close-btn {
+    font-size: 1.3rem;
+  }
+
+  .modal-body {
+    font-size: 0.9rem;
+  }
+
+  .modal-item strong {
+    font-size: 1rem;
+  }
+
+  .modal-item p {
+    font-size: 0.9rem;
+  }
+
+  .action-btn {
+    font-size: 0.9rem;
+    padding: 8px 16px;
+  }
+}
+
+/* Tablets */
+@media screen and (max-width: 768px) {
+  .tasks-container {
+    min-width: auto;
+    width: 83%;
+    max-height: 500px;
+    height: 500px;
+    padding: 20px;
+    border-radius: 30px;
+  }
+
+  .list-item-content {
+    padding: 0px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    width: 100%;
+    justify-content: space-between;
+  }
+  
+}
+
+/* Celulares */
+@media screen and (max-width: 480px) {
+  .tasks-container {
+    width: 83%;
+    max-height: 80vh;
+    height: 80vh;
+    padding: 15px;
+    border-radius: 20px;
+    margin: 10px auto;
+  }
+}
+
+/* Celulares pequenos */
+@media screen and (max-width: 320px) {
+  .tasks-container {
+    width: 100%;
+    padding: 10px;
+    border-radius: 15px;
+  }
+}
+
+/* Ajustes para altura da tela */
+@media screen and (max-height: 700px) {
+  .tasks-container {
+    max-height: 90vh;
+    height: 90vh;
+  }
+}
+
+/* Modo paisagem em dispositivos móveis */
+@media screen and (max-height: 500px) and (orientation: landscape) {
+  .tasks-container {
+    max-height: 85vh;
+    height: 85vh;
+    padding: 15px;
+  }
+}
+
+

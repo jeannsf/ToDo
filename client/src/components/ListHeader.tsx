@@ -1,43 +1,39 @@
-import React, { useState } from 'react'
-import Modal from './Modal'
-import { useCookies } from 'react-cookie'
+import React from "react";
+import { useCookies } from "react-cookie";
 
 interface ListHeaderProps {
-  listName: string
-  getData: () => void
+  listName: string;
+  getData: () => void;
+  setShowModal: (show: boolean) => void; 
+  email: string;
 }
 
-const ListHeader: React.FC<ListHeaderProps> = ({ listName, getData }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(['Email', 'AuthToken'])
-  const [showModal, setShowModal] = useState<boolean>(false)
+const ListHeader: React.FC<ListHeaderProps> = ({ listName, getData, setShowModal, email }) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["Email", "AuthToken"]);
 
   const signOut = (): void => {
-    console.log('signout')
-    removeCookie('Email')
-    removeCookie('AuthToken')
-    window.location.reload()
-  }
+    console.log("signout");
+    removeCookie("Email");
+    removeCookie("AuthToken");
+    window.location.reload();
+  };
 
   return (
     <div className="list-header">
-      <h1>{listName}</h1>
+      <div className="listheader-content">
+        <h1>{listName}</h1> 
+        <p className="user-email">Bem-Vindo {email}</p>
+      </div>
       <div className="button-container">
-        <button className="create" onClick={() => setShowModal(true)}>
+        <button className="create" onClick={() => setShowModal(true)} style={{ color: "black" }}>
           Adicionar
         </button>
         <button className="signout" onClick={signOut}>
           Sair
         </button>
       </div>
-      {showModal && (
-        <Modal
-          mode="Crie"
-          setShowModal={setShowModal}
-          getData={getData}
-        />
-      )}
     </div>
-  )
-}
+  );
+};
 
-export default ListHeader
+export default ListHeader;
